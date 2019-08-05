@@ -47,6 +47,7 @@ void Game::ComposeFrame()
 	auto lines = cube.GetLines();
 	for (auto& v : lines.verticies)
 	{
+		v += {0.0f, 0.0f, 2.0f};
 		sst.Transform(v);
 	}
 

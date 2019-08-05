@@ -13,8 +13,9 @@ public:
 
 	Vec3& Transform(Vec3& v)
 	{
-		v.x = (v.x + 1.0f)*_xFactor;
-		v.y = (v.y + 1.0f)*_yFactor;
+		const float zin = 1.0f / v.z;
+		v.x = (v.x*zin + 1.0f)*_xFactor;
+		v.y = (-v.y*zin + 1.0f)*_yFactor;
 		return v;
 	}
 
