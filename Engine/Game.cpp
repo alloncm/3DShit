@@ -20,7 +20,7 @@
 ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
-#include "Mat2.h"
+#include "Mat3.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -47,6 +47,9 @@ void Game::ComposeFrame()
 	auto lines = cube.GetLines();
 	for (auto& v : lines.verticies)
 	{
+		v *= Mat3::RotateX(1.5);
+		v *= Mat3::RotateY(0.5);
+		v *= Mat3::RotateZ(2);
 		v += {0.0f, 0.0f, 2.0f};
 		sst.Transform(v);
 	}

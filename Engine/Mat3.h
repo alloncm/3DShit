@@ -80,6 +80,40 @@ public:
 			(T)0.0,(T)0.0,factor
 		};
 	}
+	static _Mat3 RotateZ(T angel)
+	{
+		const T sint = std::sin(angel);
+		const T cost = std::cos(angel);
+
+		return{
+			cost,  sint, (T)0,
+			-sint, cost, (T)0,
+			(T)0,  (T)0, (T)1
+		};
+	}
+	static _Mat3 RotateY(T angel)
+	{
+		const T sint = std::sin(angel);
+		const T cost = std::cos(angel);
+
+		return{
+			cost,  (T)0, -sint,
+			(T)0,  (T)1, (T)0,
+			sint,  (T)0, cost
+		};
+	}
+	static _Mat3 RotateX(T angel)
+	{
+		const T sint = std::sin(angel);
+		const T cost = std::cos(angel);
+
+		return{ 
+			(T)1, (T)0,  (T)0,
+			(T)0, cost,  sint,
+			(T)0, -sint, cost
+			
+		};
+	}
 public:
 	// [ row ][ col ]
 	T elements[3][3];
