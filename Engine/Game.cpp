@@ -22,10 +22,10 @@
 #include "Game.h"
 #include "Mat3.h"
 
-Game::Game( MainWindow& wnd )
+Game::Game(MainWindow& wnd)
 	:
-	wnd( wnd ),
-	gfx( wnd ),
+	wnd(wnd),
+	gfx(wnd),
 	cube(1.0f)
 {
 }
@@ -40,22 +40,38 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	const float rotInc = 0.03;
+	if (wnd.kbd.KeyIsPressed('A'))
+	{
+		rotX += rotInc;
+	}
+	if (wnd.kbd.KeyIsPressed('S'))
+	{
+		rotY += rotInc;
+	}
+	if (wnd.kbd.KeyIsPressed('D'))
+	{
+		rotZ += rotInc;
+	}
+
 }
 
 void Game::ComposeFrame()
 {
-	auto lines = cube.GetLines();
-	for (auto& v : lines.verticies)
+	auto triangled = cube.GetRtiangles();
+	const Mat3 rot =
+		Mat3::RotateX(rotX)*
+		Mat3::RotateY(rotY)*
+		Mat3::RotateZ(rotZ);
+	for (auto& v : triangled.verticies)
 	{
-		v *= Mat3::RotateX(1.5);
-		v *= Mat3::RotateY(0.5);
-		v *= Mat3::RotateZ(2);
+		v *= rot;
 		v += {0.0f, 0.0f, 2.0f};
 		sst.Transform(v);
 	}
 
-	for (auto i = lines.indicies.begin(), end = lines.indicies.end(); i != end; std::advance(i, 2))
+	for (auto i = triangled.indicies.cbegin(), end = triangled.indicies.cend(); i != end; std::advance(i, 3))
 	{
-		gfx.DrawLine(lines.verticies[*i], lines.verticies[*(i + 1)],Colors::White);
+		gfx.DrawTriangle(triangled.verticies[*i], triangled.verticies[*std::next(i)], triangled.verticies[*std::next(i,2)], Colors::White);
 	}
 }

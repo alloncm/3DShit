@@ -30,9 +30,9 @@
 class Game
 {
 public:
-	Game( class MainWindow& wnd );
-	Game( const Game& ) = delete;
-	Game& operator=( const Game& ) = delete;
+	Game(class MainWindow& wnd);
+	Game(const Game&) = delete;
+	Game& operator=(const Game&) = delete;
 	void Go();
 private:
 	void ComposeFrame();
@@ -47,5 +47,8 @@ private:
 	/*  User Variables              */
 	Cube cube;
 	ScreenSpaceTransformer sst;
+	float rotX = 0;
+	float rotY = 0;
+	float rotZ = 0;
 	/********************************/
 };
