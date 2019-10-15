@@ -58,20 +58,39 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	auto triangled = cube.GetRtiangles();
+	auto triangles = cube.GetRtiangles();
 	const Mat3 rot =
 		Mat3::RotateX(rotX)*
 		Mat3::RotateY(rotY)*
 		Mat3::RotateZ(rotZ);
-	for (auto& v : triangled.verticies)
+	for (auto& v : triangles.verticies)
 	{
 		v *= rot;
 		v += {0.0f, 0.0f, 2.0f};
-		sst.Transform(v);
 	}
 
-	for (auto i = triangled.indicies.cbegin(), end = triangled.indicies.cend(); i != end; std::advance(i, 3))
+	for (size_t i = 0, end = triangles.indicies.size() / 3; i < end; i++)
 	{
-		gfx.DrawTriangle(triangled.verticies[*i], triangled.verticies[*std::next(i)], triangled.verticies[*std::next(i,2)], Colors::White);
+		const Vec3& v0 = triangles.verticies[triangles.indicies[i * 3]];
+		const Vec3& v1 = triangles.verticies[triangles.indicies[i * 3+1]];
+		const Vec3& v2 = triangles.verticies[triangles.indicies[i * 3+2]];
+		triangles.cullingFlags[i] = (v1 - v0).cross(v2 - v0)*v0 >= 0.0f;
+	}
+
+	for (auto& v : triangles.verticies)
+	{
+		sst.Transform(v);
+	}
+	auto i = triangles.indicies.cbegin();
+
+	for (size_t i=0,end = triangles.indicies.size()/3;i<end;i++)
+	{
+		if (!triangles.cullingFlags[i])
+		{
+			gfx.DrawTriangle(triangles.verticies[triangles.indicies[i*3]], 
+				triangles.verticies[triangles.indicies[i*3+1]], 
+				triangles.verticies[triangles.indicies[i*3+2]], 
+				Colors::White);
+		}
 	}
 }
