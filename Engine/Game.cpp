@@ -81,8 +81,20 @@ void Game::ComposeFrame()
 	{
 		sst.Transform(v);
 	}
-	auto i = triangles.indicies.cbegin();
-
+	std::vector<Color> colors{
+		Colors::Blue,
+		Colors::Cyan,
+		Colors::Gray,
+		Colors::Green,
+		Colors::LightGray,
+		Colors::Magenta,
+		Colors::Red,
+		Colors::White,
+		Colors::Yellow,
+		Color::Color(50,50,0),
+		Color::Color(150,150,0),
+		Color::Color(100,100,0),
+	};
 	for (size_t i=0,end = triangles.indicies.size()/3;i<end;i++)
 	{
 		if (!triangles.cullingFlags[i])
@@ -90,7 +102,7 @@ void Game::ComposeFrame()
 			gfx.DrawTriangle(triangles.verticies[triangles.indicies[i*3]], 
 				triangles.verticies[triangles.indicies[i*3+1]], 
 				triangles.verticies[triangles.indicies[i*3+2]], 
-				Colors::White);
+				colors[i]);
 		}
 	}
 }
