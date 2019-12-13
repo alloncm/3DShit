@@ -20,7 +20,7 @@
 ******************************************************************************************/
 #pragma once
 
-#include "ChiliMath.h"
+#include"Vec2.h"
 
 template <typename T>
 class _Vec3 : public _Vec2<T>
@@ -139,6 +139,12 @@ public:
 	{
 		return !(*this == rhs);
 	}
+
+	_Vec3 InterpolateTo(const _Vec3& dest, float alpha)const
+	{
+		return (1 - alpha) * (*this) + (alpha * dest);
+	}
+
 public:
 	T z;
 };

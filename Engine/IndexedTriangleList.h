@@ -3,9 +3,10 @@
 #include<vector>
 #include"Vec3.h"
 
+template<typename T>
 struct IndexedTriangleList
 {
-	IndexedTriangleList(std::vector<Vec3>ver, std::vector<size_t> ind)
+	IndexedTriangleList(std::vector<T>ver, std::vector<size_t> ind)
 		:
 		verticies(std::move(ver)),
 		indicies(std::move(ind))
@@ -15,7 +16,7 @@ struct IndexedTriangleList
 		cullingFlags.resize(indicies.size() / 3, false);
 	}
 
-	std::vector<Vec3> verticies;
+	std::vector<T> verticies;
 	std::vector<size_t> indicies;
 	std::vector<bool> cullingFlags;
 };

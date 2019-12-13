@@ -324,6 +324,44 @@ void Graphics::DrawTriangle(const Vec2 & v0, const Vec2 & v1, const Vec2 & v2, C
 	}
 }
 
+void Graphics::DrawTriangleTex(const TexVertex & v0, const TexVertex & v1, const TexVertex & v2, const Surface & surface)
+{
+	const TexVertex* pv0 = &v0;
+	const TexVertex* pv1 = &v1;
+	const TexVertex* pv2 = &v2;
+
+	if (pv0->pos.y > pv1->pos.y) std::swap(pv0, pv1);
+	if (pv1->pos.y > pv2->pos.y) std::swap(pv1, pv2);
+	if (pv0->pos.y > pv1->pos.y) std::swap(pv0, pv1);
+
+	if (pv0->pos.y == pv1->pos.y)
+	{
+		if (pv0->pos.x > pv1->pos.x) std::swap(pv0, pv1);
+		DrawFlatTopTriangleTex(*pv0, *pv1, *pv2, surface);
+	}
+	else if (pv1->pos.y == pv2->pos.y)
+	{
+		if (pv1->pos.x > pv2->pos.x) std::swap(pv1, pv2);
+		DrawFlatBottomTriangleTex(*pv0, *pv1, *pv2, surface);
+	}
+	else
+	{
+		const float alpha = (pv1->pos.y - pv0->pos.y) / (pv2->pos.y - pv0->pos.y);
+		const TexVertex vi = pv0->InterpolateTo(*pv2, alpha);
+
+		if (pv1->pos.x < vi.pos.x)
+		{
+			DrawFlatBottomTriangleTex(*pv0, *pv1, vi, surface);
+			DrawFlatTopTriangleTex(*pv1, vi, *pv2, surface);
+		}
+		else
+		{
+			DrawFlatBottomTriangleTex(*pv0, vi, *pv1, surface);
+			DrawFlatTopTriangleTex(vi, *pv1, *pv2, surface);
+		}
+	}
+}
+
 
 //////////////////////////////////////////////////
 //           Graphics Exception
@@ -464,4 +502,31 @@ void Graphics::DrawFlatTopTriangle(const Vec2 & v0, const Vec2 & v1, const Vec2 
 			PutPixel(x, y, c);
 		}
 	}
+}
+
+void Graphics::DrawFlatBottomTriangleTex(const TexVertex & v0, const TexVertex & v1, const TexVertex & v2, const Surface & surface)
+{
+	const float m0 = (v0.pos.x - v1.pos.x) / (v0.pos.y - v1.pos.y);
+	const float m1 = (v0.pos.x - v2.pos.x) / (v0.pos.y - v2.pos.y);
+
+	const int startY = (int)ceil(v0.pos.y - 0.5);
+	const int endY = (int)ceil(v1.pos.y - 0.5);
+
+		
+}
+
+void Graphics::DrawFlatTopTriangleTex(const TexVertex & v0, const TexVertex & v1, const TexVertex & v2, const Surface & surface)
+{
+	const float m0 = (v2.pos.x - v0.pos.x) / (v2.pos.y - v0.pos.y);
+	const float m1 = (v2.pos.x - v1.pos.x) / (v2.pos.y - v1.pos.y);
+
+	const int startY = (int)ceil(v0.pos.y - 0.5);
+	const int endY = (int)ceil(v2.pos.y - 0.5);
+
+	Vec2 tcEdgeL = v0.tc;
+	Vec2 tcEdgeR = v1.tc;
+	const Vec2 tcBotoom = v2.tc;
+
+
+
 }
