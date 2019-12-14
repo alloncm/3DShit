@@ -30,7 +30,7 @@ public:
 		};
 	}
 
-	IndexedTriangleList GetRtiangles()const
+	IndexedTriangleList<Vec3> GetRtiangles()const
 	{
 		return{
 			verticies,{

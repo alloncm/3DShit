@@ -142,7 +142,7 @@ public:
 
 	_Vec3 InterpolateTo(const _Vec3& dest, float alpha)const
 	{
-		return (1 - alpha) * (*this) + (alpha * dest);
+		return (*this) + (dest * alpha) * (1 - alpha);
 	}
 
 public:
